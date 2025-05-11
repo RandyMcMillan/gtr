@@ -2,7 +2,7 @@
 use gtr::git_interface::{gtr_setup, upload_pack};
 use gtr::config::branches::{include, remove, list};
 // TODO: use a feature and inject in a different place
-use gtr::transports::default;
+//use gtr::transports::default;
 use gtr::gti::cli;
 
 // XXX UX:
