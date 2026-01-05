@@ -6,8 +6,8 @@ use toml;
 use crate::utils::error::{GtrResult, ConfigError};
 
 // manage content of `dir/.gtr/gtrd-export
-static CONFIG_DIR: &str = ".gtr";
-static CONFIG_FILE: &str = "config.toml";
+pub static CONFIG_DIR: &str = ".gtr";
+pub static CONFIG_FILE: &str = "config.toml";
 
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize, Debug)]
@@ -33,14 +33,17 @@ pub struct AddressPort {
     pub port: u16,
 }
 
-const DEFAULT_CONFIG: Config = Config {
+pub const DEFAULT_CONFIG: Config = Config {
     branches: vec![],
     transport: Transport { torrent: None }
 };
 
 impl Config {
     pub async fn save(&self, dir: &PathBuf) -> GtrResult<()> {
-        let (_, settings_path) = get_config_path_dir_and_file(dir);
+        let (config_dir, settings_path) = get_config_path_dir_and_file(dir);
+
+        // Ensure the config directory exists
+        create_dir_all(&config_dir).await.map_err(|e| ConfigError::dir_creation_failed(Box::new(e)))?;
 
         match File::create(&settings_path).await {
             Err(e) => return Err(ConfigError::save_failed(Box::new(e))),
