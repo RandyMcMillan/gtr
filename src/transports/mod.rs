@@ -23,6 +23,6 @@ pub mod scuttlebutt_test;
 
 #[async_trait]
 pub trait Transport: Send + Sync {
-    async fn connect(&self, address: &str) -> GtrResult<()>;
-    async fn listen(&self, address: &str) -> GtrResult<()>;
+    async fn connect(&self, address: &str) -> String;
+    async fn listen(&self, address: &str) -> String;
 }

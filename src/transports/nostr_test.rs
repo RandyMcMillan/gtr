@@ -1,16 +1,18 @@
-use super::nostr::NostrTransport;
 use crate::transports::Transport;
+use super::nostr::NostrTransport;
 
 #[tokio::test]
 async fn test_nostr_transport_connect() {
     let transport = NostrTransport;
-    let result = transport.connect("nostr://example.com").await;
-    assert!(result.is_ok());
+    let address = "nostr://example.com";
+    let result = transport.connect(address).await;
+    assert_eq!(result, format!("Connecting via nostr to {}", address));
 }
 
 #[tokio::test]
 async fn test_nostr_transport_listen() {
     let transport = NostrTransport;
-    let result = transport.listen("0.0.0.0:8080").await;
-    assert!(result.is_ok());
+    let address = "0.0.0.0:8080";
+    let result = transport.listen(address).await;
+    assert_eq!(result, format!("Listening via nostr on {}", address));
 }

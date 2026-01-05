@@ -6,15 +6,11 @@ pub struct HolepunchTransport;
 
 #[async_trait]
 impl super::Transport for HolepunchTransport {
-    async fn connect(&self, _address: &str) -> GtrResult<()> {
-        // TODO: Implement holepunch connect logic
-        println!("Connecting via holepunch to {}", _address);
-        Ok(())
+    async fn connect(&self, _address: &str) -> String {
+        format!("Connecting via holepunch to {}", _address)
     }
 
-    async fn listen(&self, _address: &str) -> GtrResult<()> {
-        // TODO: Implement holepunch listen logic
-        println!("Listening via holepunch on {}", _address);
-        Ok(())
+    async fn listen(&self, _address: &str) -> String {
+        format!("Listening via holepunch on {}", _address)
     }
 }

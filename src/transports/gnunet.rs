@@ -6,15 +6,11 @@ pub struct GnunetTransport;
 
 #[async_trait]
 impl super::Transport for GnunetTransport {
-    async fn connect(&self, _address: &str) -> GtrResult<()> {
-        // TODO: Implement gnunet connect logic
-        println!("Connecting via gnunet to {}", _address);
-        Ok(())
+    async fn connect(&self, _address: &str) -> String {
+        format!("Connecting via gnunet to {}", _address)
     }
 
-    async fn listen(&self, _address: &str) -> GtrResult<()> {
-        // TODO: Implement gnunet listen logic
-        println!("Listening via gnunet on {}", _address);
-        Ok(())
+    async fn listen(&self, _address: &str) -> String {
+        format!("Listening via gnunet on {}", _address)
     }
 }

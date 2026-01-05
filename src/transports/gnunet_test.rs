@@ -1,16 +1,18 @@
-use super::gnunet::GnunetTransport;
 use crate::transports::Transport;
+use super::gnunet::GnunetTransport;
 
 #[tokio::test]
 async fn test_gnunet_transport_connect() {
     let transport = GnunetTransport;
-    let result = transport.connect("gnunet://example.com").await;
-    assert!(result.is_ok());
+    let address = "gnunet://example.com";
+    let result = transport.connect(address).await;
+    assert_eq!(result, format!("Connecting via gnunet to {}", address));
 }
 
 #[tokio::test]
 async fn test_gnunet_transport_listen() {
     let transport = GnunetTransport;
-    let result = transport.listen("0.0.0.0:8080").await;
-    assert!(result.is_ok());
+    let address = "0.0.0.0:8080";
+    let result = transport.listen(address).await;
+    assert_eq!(result, format!("Listening via gnunet on {}", address));
 }
