@@ -1,5 +1,5 @@
 use super::scuttlebutt::ScuttlebuttTransport;
-use super::super::Transport;
+use crate::transports::Transport;
 
 #[tokio::test]
 async fn test_scuttlebutt_transport_connect() {

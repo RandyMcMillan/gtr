@@ -1,5 +1,5 @@
 use super::nostr::NostrTransport;
-use super::super::Transport;
+use crate::transports::Transport;
 
 #[tokio::test]
 async fn test_nostr_transport_connect() {

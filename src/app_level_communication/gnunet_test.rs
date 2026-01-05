@@ -1,5 +1,5 @@
 use super::gnunet::GnunetAppLevelCommunication;
-use super::super::ApplicationLevelCommunication;
+use crate::app_level_communication::ApplicationLevelCommunication;
 
 #[test]
 fn test_gnunet_app_level_communication_send() {

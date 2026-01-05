@@ -1,5 +1,5 @@
 use super::scuttlebutt::ScuttlebuttAppLevelCommunication;
-use super::super::ApplicationLevelCommunication;
+use crate::app_level_communication::ApplicationLevelCommunication;
 
 #[test]
 fn test_scuttlebutt_app_level_communication_send() {

@@ -1,5 +1,5 @@
 use super::gnunet::GnunetTransport;
-use super::super::Transport;
+use crate::transports::Transport;
 
 #[tokio::test]
 async fn test_gnunet_transport_connect() {

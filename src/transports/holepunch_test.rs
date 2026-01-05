@@ -1,5 +1,5 @@
 use super::holepunch::HolepunchTransport;
-use super::super::Transport;
+use crate::transports::Transport;
 
 #[tokio::test]
 async fn test_holepunch_transport_connect() {

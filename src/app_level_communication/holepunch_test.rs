@@ -1,5 +1,5 @@
 use super::holepunch::HolepunchAppLevelCommunication;
-use super::super::ApplicationLevelCommunication;
+use crate::app_level_communication::ApplicationLevelCommunication;
 
 #[test]
 fn test_holepunch_app_level_communication_send() {

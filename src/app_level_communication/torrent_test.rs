@@ -1,5 +1,5 @@
 use super::torrent::TorrentAppLevelCommunication;
-use super::super::ApplicationLevelCommunication;
+use crate::app_level_communication::ApplicationLevelCommunication;
 
 #[test]
 fn test_torrent_app_level_communication_send() {
