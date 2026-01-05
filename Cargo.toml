@@ -5,7 +5,7 @@ edition = "2021"
 author = "dzdidi"
 about = "decentralized colaborative change management system"
 repository = "https://github.com/RandyMcMillan/gtr"
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+homepage = "https://github.com/RandyMcMillan/gtr"
 
 [dependencies]
 async-trait = "0.1"
