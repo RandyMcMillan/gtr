@@ -27,3 +27,20 @@ jobs:
       run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
+
+  test-all-features:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Configure Git User
+      run: |
+        git config --global user.email "ci@example.com"
+        git config --global user.name "CI User"
+    - name: Build with all features
+      run: cargo build --verbose --all-features
+    - name: Test with all features
+      run: cargo test --verbose --all-features
