@@ -1,8 +1,9 @@
-use predicates::prelude::*;
+use std::path::Path;
+
 use assert_cmd::Command;
+use predicates::prelude::*;
 use tempfile::tempdir;
 use tokio::fs;
-use std::path::Path;
 
 const BIN_NAME: &str = "gtr";
 const SETTINGS_DIR: &str = ".gtr";
@@ -15,7 +16,9 @@ async fn create_test_git_repo(path: &Path) {
         .status()
         .await
         .unwrap();
-    tokio::fs::write(path.join("initial_file.txt"), "initial content").await.unwrap();
+    tokio::fs::write(path.join("initial_file.txt"), "initial content")
+        .await
+        .unwrap();
     tokio::process::Command::new("git")
         .arg("add")
         .arg("initial_file.txt")
@@ -39,7 +42,8 @@ async fn e2e_init_command() {
     let repo_path = tmp_dir.path().to_path_buf();
     create_test_git_repo(&repo_path).await;
 
-    Command::cargo_bin(BIN_NAME).unwrap()
+    Command::cargo_bin(BIN_NAME)
+        .unwrap()
         .arg("init")
         .arg("-p")
         .arg(&repo_path)
@@ -59,7 +63,8 @@ async fn e2e_setup_command() {
     let repo_path = tmp_dir.path().to_path_buf();
     create_test_git_repo(&repo_path).await;
 
-    Command::cargo_bin(BIN_NAME).unwrap()
+    Command::cargo_bin(BIN_NAME)
+        .unwrap()
         .arg("setup")
         .arg("-p")
         .arg(&repo_path)
@@ -72,7 +77,6 @@ async fn e2e_setup_command() {
 
     tmp_dir.close().unwrap();
 }
-
 
 #[tokio::test]
 async fn e2e_share_command_new_branch() {
@@ -90,7 +94,8 @@ async fn e2e_share_command_new_branch() {
         .await
         .unwrap();
 
-    Command::cargo_bin(BIN_NAME).unwrap()
+    Command::cargo_bin(BIN_NAME)
+        .unwrap()
         .arg("share")
         .arg("-p")
         .arg(&repo_path)
@@ -127,7 +132,8 @@ async fn e2e_list_command() {
         .await
         .unwrap();
 
-    Command::cargo_bin(BIN_NAME).unwrap()
+    Command::cargo_bin(BIN_NAME)
+        .unwrap()
         .arg("list")
         .arg("-p")
         .arg(&repo_path)
@@ -156,7 +162,8 @@ async fn e2e_remove_command() {
         .await
         .unwrap();
 
-    Command::cargo_bin(BIN_NAME).unwrap()
+    Command::cargo_bin(BIN_NAME)
+        .unwrap()
         .arg("remove")
         .arg("-p")
         .arg(&repo_path)
