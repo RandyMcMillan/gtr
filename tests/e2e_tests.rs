@@ -54,6 +54,27 @@ async fn e2e_init_command() {
 }
 
 #[tokio::test]
+async fn e2e_setup_command() {
+    let tmp_dir = tempdir().unwrap();
+    let repo_path = tmp_dir.path().to_path_buf();
+    create_test_git_repo(&repo_path).await;
+
+    Command::cargo_bin(BIN_NAME).unwrap()
+        .arg("setup")
+        .arg("-p")
+        .arg(&repo_path)
+        .assert()
+        .success();
+
+    let gitignore_path = repo_path.join(".gitignore");
+    let gitignore_content = fs::read_to_string(&gitignore_path).await.unwrap();
+    assert!(gitignore_content.contains(SETTINGS_DIR));
+
+    tmp_dir.close().unwrap();
+}
+
+
+#[tokio::test]
 async fn e2e_share_command_new_branch() {
     let tmp_dir = tempdir().unwrap();
     let repo_path = tmp_dir.path().to_path_buf();
