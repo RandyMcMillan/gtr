@@ -37,6 +37,9 @@ path = "tests/e2e_tests.rs"
 
 [features]
 torrent = ["dep:bip_dht", "dep:bip_handshake", "dep:bip_util"]
-# holepunch
-# scuttlebutt
-# gnunet
+nostr = []
+https_ssl = []
+holepunch = []
+scuttlebutt = []
+gnunet = []
+
