@@ -193,6 +193,7 @@ async fn write_pack_file(dir: &PathBuf, want:  &str, initial_pack_data: Option<V
         Ok(_) => {
             let file_path = dir.join(format!("{want}.pack"));
             let mut file = File::create(file_path).await.unwrap();
+            dbg!(&pack_content.len());
             file.write_all(&pack_content).await.unwrap();
         }
     };
