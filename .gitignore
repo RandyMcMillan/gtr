@@ -1,3 +1,4 @@
+/vendor
 /target
 /src/*.example.*
 .gtr
