@@ -122,15 +122,15 @@ async fn e2e_list_command() {
     create_test_git_repo(&repo_path).await;
 
     // Share master and dev branches
-    tokio::process::Command::new(BIN_NAME)
+    Command::cargo_bin(BIN_NAME)
+        .unwrap()
         .arg("share")
         .arg("-p")
         .arg(&repo_path)
         .arg("-b")
         .arg("master,dev")
-        .status()
-        .await
-        .unwrap();
+        .assert()
+        .success();
 
     Command::cargo_bin(BIN_NAME)
         .unwrap()
@@ -152,15 +152,15 @@ async fn e2e_remove_command() {
     create_test_git_repo(&repo_path).await;
 
     // Share master and dev branches
-    tokio::process::Command::new(BIN_NAME)
+    Command::cargo_bin(BIN_NAME)
+        .unwrap()
         .arg("share")
         .arg("-p")
         .arg(&repo_path)
         .arg("-b")
         .arg("master,dev")
-        .status()
-        .await
-        .unwrap();
+        .assert()
+        .success();
 
     Command::cargo_bin(BIN_NAME)
         .unwrap()
