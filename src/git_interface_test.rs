@@ -1,9 +1,9 @@
-use super::git_interface::{gtr_setup, is_git, SETTINGS_DIR};
+use super::git_interface::{gtr_setup, is_git, SETTINGS_DIR, upload_pack};
 use std::path::Path;
 use tempfile::tempdir;
 use tokio::fs;
 
-async fn create_test_git_repo(path: &Path) {
+async fn create_test_git_repo(path: &Path) -> String {
     tokio::process::Command::new("git")
         .arg("init")
         .current_dir(path)
@@ -27,6 +27,15 @@ async fn create_test_git_repo(path: &Path) {
         .status()
         .await
         .unwrap();
+
+    let output = tokio::process::Command::new("git")
+        .arg("rev-parse")
+        .arg("HEAD")
+        .current_dir(path)
+        .output()
+        .await
+        .unwrap();
+    String::from_utf8(output.stdout).unwrap().trim().to_string()
 }
 
 #[tokio::test]
@@ -101,6 +110,22 @@ async fn test_gtr_setup_not_git_repo() {
 
     assert!(result.is_err());
     assert_eq!(result.unwrap_err().to_string(), format!("{} is not a git repository", repo_path.display()));
+
+    tmp_dir.close().unwrap();
+}
+
+#[tokio::test]
+async fn test_upload_pack() {
+    let tmp_dir = tempdir().unwrap();
+    let repo_path = tmp_dir.path().to_path_buf();
+
+    let want_hash = create_test_git_repo(&repo_path).await;
+
+    upload_pack(&repo_path, &want_hash, None).await.unwrap();
+
+    let pack_file_path = repo_path.join(format!("{}.pack", want_hash));
+    assert!(pack_file_path.exists());
+    assert!(fs::metadata(&pack_file_path).await.unwrap().len() > 0);
 
     tmp_dir.close().unwrap();
 }
