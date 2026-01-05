@@ -6,7 +6,10 @@ fn test_scuttlebutt_app_level_communication_send() {
     let comm = ScuttlebuttAppLevelCommunication;
     let message = "hello";
     let result = comm.send_message(message);
-    assert_eq!(result, format!("Sending message via scuttlebutt: {}", message));
+    assert_eq!(
+        result,
+        format!("Sending message via scuttlebutt: {}", message)
+    );
 }
 
 #[test]

@@ -1,12 +1,10 @@
-use std::fmt;
-use std::error::Error;
-use std::path::PathBuf;
+use std::{error::Error, fmt, path::PathBuf};
 
 pub type GtrResult<T> = std::result::Result<T, GtrError>;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct GtrError {
-    message: String
+    message: String,
 }
 
 impl GtrError {
@@ -33,7 +31,10 @@ pub trait GitError {
 
 impl GitError for GtrError {
     fn not_git_repo(dir: &PathBuf) -> Self {
-        GtrError::new(format!("{} is not a git repository", dir.as_path().display()))
+        GtrError::new(format!(
+            "{} is not a git repository",
+            dir.as_path().display()
+        ))
     }
 
     fn command_failed(e: Box<dyn Error>) -> Self {
@@ -51,7 +52,7 @@ impl GitError for GtrError {
     fn pack_write_failed(e: Box<dyn Error>) -> Self {
         GtrError::new(format!("Error reading pack file content: {:?}", e))
     }
- }
+}
 
 pub trait ConfigError {
     fn save_failed(e: Box<dyn Error>) -> Self;

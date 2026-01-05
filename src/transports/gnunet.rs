@@ -1,5 +1,6 @@
-use crate::utils::error::GtrResult;
 use async_trait::async_trait;
+
+use crate::utils::error::GtrResult;
 
 pub struct GnunetTransport;
 

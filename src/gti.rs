@@ -1,5 +1,6 @@
-use clap::{arg, Arg, ArgAction, command, Command, value_parser};
 use std::path::PathBuf;
+
+use clap::{Arg, ArgAction, Command, arg, command, value_parser};
 
 pub fn cli() -> Command {
     let path_arg = Arg::new("path")

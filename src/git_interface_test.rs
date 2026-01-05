@@ -1,7 +1,11 @@
-use super::git_interface::{gtr_setup, is_git, SETTINGS_DIR, upload_pack, ls_remote, select_exsiting_branches};
 use std::path::Path;
+
 use tempfile::tempdir;
 use tokio::fs;
+
+use super::git_interface::{
+    SETTINGS_DIR, gtr_setup, is_git, ls_remote, select_exsiting_branches, upload_pack,
+};
 
 async fn create_test_git_repo(path: &Path) -> String {
     tokio::process::Command::new("git")
@@ -11,7 +15,9 @@ async fn create_test_git_repo(path: &Path) -> String {
         .await
         .unwrap();
     // Create an initial commit to have a valid git repo
-    tokio::fs::write(path.join("initial_file.txt"), "initial content").await.unwrap();
+    tokio::fs::write(path.join("initial_file.txt"), "initial content")
+        .await
+        .unwrap();
     tokio::process::Command::new("git")
         .arg("add")
         .arg("initial_file.txt")
@@ -109,7 +115,10 @@ async fn test_gtr_setup_not_git_repo() {
     let result = gtr_setup(&repo_path).await;
 
     assert!(result.is_err());
-    assert_eq!(result.unwrap_err().to_string(), format!("{} is not a git repository", repo_path.display()));
+    assert_eq!(
+        result.unwrap_err().to_string(),
+        format!("{} is not a git repository", repo_path.display())
+    );
 
     tmp_dir.close().unwrap();
 }
@@ -181,10 +190,18 @@ async fn test_select_existing_branches() {
         .await
         .unwrap();
 
-    let all_branches = vec!["master".to_string(), "dev".to_string(), "feature/new".to_string(), "nonexistent".to_string()];
+    let all_branches = vec![
+        "master".to_string(),
+        "dev".to_string(),
+        "feature/new".to_string(),
+        "nonexistent".to_string(),
+    ];
     let all_branches_ref: Vec<&String> = all_branches.iter().collect();
 
-    let selected_branches = select_exsiting_branches(repo_path.to_str().unwrap(), &all_branches_ref).await.unwrap();
+    let selected_branches =
+        select_exsiting_branches(repo_path.to_str().unwrap(), &all_branches_ref)
+            .await
+            .unwrap();
 
     assert_eq!(selected_branches.len(), 3);
     assert!(selected_branches.contains(&"refs/heads/master".to_string()));

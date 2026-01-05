@@ -6,7 +6,10 @@ fn test_holepunch_app_level_communication_send() {
     let comm = HolepunchAppLevelCommunication;
     let message = "hello";
     let result = comm.send_message(message);
-    assert_eq!(result, format!("Sending message via holepunch: {}", message));
+    assert_eq!(
+        result,
+        format!("Sending message via holepunch: {}", message)
+    );
 }
 
 #[test]

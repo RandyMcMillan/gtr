@@ -1,12 +1,12 @@
-use std::path::PathBuf;
-use std::collections::HashSet;
-use crate::config::config_file;
-use crate::utils::error::GtrResult;
+use std::{collections::HashSet, path::PathBuf};
+
+use crate::{config::config_file, utils::error::GtrResult};
 
 /// Add branches to be shared via gtrd
 ///
-/// The first parameter is the git repo directory. The second parameter is the list of branches to be added.
-/// It adds branches resolving duplication, stores them .gtr/gtrd-export.
+/// The first parameter is the git repo directory. The second parameter is the
+/// list of branches to be added. It adds branches resolving duplication, stores
+/// them .gtr/gtrd-export.
 pub async fn include(dir: &PathBuf, new_branches: &Vec<&String>) -> GtrResult<()> {
     let old_branches = read_branches(dir).await?;
     let old_branches: HashSet<&String> = old_branches.iter().collect();
@@ -18,13 +18,14 @@ pub async fn include(dir: &PathBuf, new_branches: &Vec<&String>) -> GtrResult<()
         .collect();
     write_new_branches(dir, &final_branches).await?;
 
-    return Ok(())
+    return Ok(());
 }
 
 /// Removes branches to be shared via gtrd
 ///
-/// The first parameter is the git repo directory. The second parameter is the list of branches not to be shared.
-/// It removes branches resolving duplication, stores new settings in .gtr/gtrd-export.
+/// The first parameter is the git repo directory. The second parameter is the
+/// list of branches not to be shared. It removes branches resolving
+/// duplication, stores new settings in .gtr/gtrd-export.
 pub async fn remove(dir: &PathBuf, del_branches: &Vec<&String>) -> GtrResult<()> {
     let old_branches = read_branches(dir).await?;
     let old_branches: HashSet<&String> = old_branches.iter().collect();
@@ -36,13 +37,14 @@ pub async fn remove(dir: &PathBuf, del_branches: &Vec<&String>) -> GtrResult<()>
         .collect();
     write_new_branches(dir, &final_branches).await?;
 
-    return Ok(())
+    return Ok(());
 }
 
 /// Lists branches currently shared via gtrd
 ///
-/// The parameter is the git repo directory. It reads branches stored in .gtr/gtrd-export
-pub async fn list(dir: &PathBuf) -> GtrResult<Vec<String>>{
+/// The parameter is the git repo directory. It reads branches stored in
+/// .gtr/gtrd-export
+pub async fn list(dir: &PathBuf) -> GtrResult<Vec<String>> {
     let res = read_branches(dir).await?;
     Ok(res)
 }
@@ -57,7 +59,7 @@ async fn read_branches(dir: &PathBuf) -> GtrResult<Vec<String>> {
     return Ok(conf.branches);
 }
 
-async fn write_new_branches(dir: &PathBuf, branches: &Vec<&String>) -> GtrResult<()>{
+async fn write_new_branches(dir: &PathBuf, branches: &Vec<&String>) -> GtrResult<()> {
     let mut sorted = branches.to_vec();
     sorted.sort();
 
@@ -66,7 +68,7 @@ async fn write_new_branches(dir: &PathBuf, branches: &Vec<&String>) -> GtrResult
 
     conf.save(dir).await?;
 
-    return Ok(())
+    return Ok(());
 }
 
 #[cfg(test)]

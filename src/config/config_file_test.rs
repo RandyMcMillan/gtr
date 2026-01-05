@@ -1,6 +1,10 @@
-use super::config_file::{Config, Transport, AddressPort, Torrent, read_or_create, CONFIG_DIR, CONFIG_FILE, DEFAULT_CONFIG};
-use tokio::fs::{read_to_string, self};
 use tempfile::tempdir;
+use tokio::fs::{self, read_to_string};
+
+use super::config_file::{
+    AddressPort, CONFIG_DIR, CONFIG_FILE, Config, DEFAULT_CONFIG, Torrent, Transport,
+    read_or_create,
+};
 
 #[tokio::test]
 async fn test_config_save() {
@@ -83,13 +87,33 @@ async fn test_read_or_create_with_existing_valid_config() {
         },
     };
     let custom_config_content = toml::to_string(&custom_config).unwrap();
-    tokio::fs::write(&config_file_path, custom_config_content.as_bytes()).await.unwrap();
+    tokio::fs::write(&config_file_path, custom_config_content.as_bytes())
+        .await
+        .unwrap();
 
     let config = read_or_create(&root_dir).await.unwrap();
 
     assert_eq!(config.branches, custom_config.branches);
-    assert_eq!(config.transport.torrent.as_ref().unwrap().router.addr, custom_config.transport.torrent.as_ref().unwrap().router.addr);
-    assert_eq!(config.transport.torrent.as_ref().unwrap().router.port, custom_config.transport.torrent.as_ref().unwrap().router.port);
+    assert_eq!(
+        config.transport.torrent.as_ref().unwrap().router.addr,
+        custom_config
+            .transport
+            .torrent
+            .as_ref()
+            .unwrap()
+            .router
+            .addr
+    );
+    assert_eq!(
+        config.transport.torrent.as_ref().unwrap().router.port,
+        custom_config
+            .transport
+            .torrent
+            .as_ref()
+            .unwrap()
+            .router
+            .port
+    );
 
     tmp_dir.close().unwrap();
 }
@@ -108,7 +132,9 @@ async fn test_read_or_create_with_invalid_config() {
 branches = ["main"
 transport = { torrent = { router = { addr = "127.0.0.1", port = 6881 }, bind = { addr = "0.0.0.0", port = 6882 } } }
 "#;
-    tokio::fs::write(&config_file_path, invalid_content.as_bytes()).await.unwrap();
+    tokio::fs::write(&config_file_path, invalid_content.as_bytes())
+        .await
+        .unwrap();
 
     let config = read_or_create(&root_dir).await.unwrap();
 
