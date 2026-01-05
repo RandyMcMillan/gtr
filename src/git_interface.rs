@@ -9,7 +9,7 @@ use regex::Regex;
 
 use crate::utils::error::{GtrResult, GitError};
 
-const SETTINGS_DIR: &str = ".gtr";
+pub const SETTINGS_DIR: &str = ".gtr";
 
 /// Checks if directory is a git repository, adds service folder to gitignore
 pub async fn gtr_setup(dir: &PathBuf) -> GtrResult<()>{
@@ -213,7 +213,7 @@ async fn store_in_gitignore(gitignore_path: &PathBuf, to_ignore: &str) -> GtrRes
     return Ok(())
 }
 /// Checks if provided directory is a git repository
-fn is_git(dir: &PathBuf) -> bool {
+pub fn is_git(dir: &PathBuf) -> bool {
     dir.join(".git").exists()
 }
 

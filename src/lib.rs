@@ -5,3 +5,6 @@ pub mod transports;
 pub mod utils;
 #[cfg(feature = "torrent")]
 pub mod torrent;
+
+#[cfg(test)]
+mod git_interface_test;
