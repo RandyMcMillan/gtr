@@ -1,5 +1,5 @@
-use super::nostr::NostrAppLevelCommunication;
 use crate::app_level_communication::ApplicationLevelCommunication;
+use super::nostr::NostrAppLevelCommunication;
 
 #[test]
 fn test_nostr_app_level_communication_send() {
