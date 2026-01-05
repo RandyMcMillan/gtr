@@ -6,6 +6,7 @@ author = "dzdidi"
 about = "decentralized colaborative change management system"
 repository = "https://github.com/RandyMcMillan/gtr"
 homepage = "https://github.com/RandyMcMillan/gtr"
+description = "rust implementation of gittorrent"
 
 [dependencies]
 async-trait = "0.1"
