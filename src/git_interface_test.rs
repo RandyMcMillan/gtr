@@ -1,4 +1,4 @@
-use super::git_interface::{gtr_setup, is_git, SETTINGS_DIR, upload_pack};
+use super::git_interface::{gtr_setup, is_git, SETTINGS_DIR, upload_pack, ls_remote, select_exsiting_branches};
 use std::path::Path;
 use tempfile::tempdir;
 use tokio::fs;
@@ -126,6 +126,71 @@ async fn test_upload_pack() {
     let pack_file_path = repo_path.join(format!("{}.pack", want_hash));
     assert!(pack_file_path.exists());
     assert!(fs::metadata(&pack_file_path).await.unwrap().len() > 0);
+
+    tmp_dir.close().unwrap();
+}
+
+#[tokio::test]
+async fn test_ls_remote() {
+    let tmp_dir = tempdir().unwrap();
+    let repo_path = tmp_dir.path().to_path_buf();
+    create_test_git_repo(&repo_path).await;
+
+    // Create a new branch
+    tokio::process::Command::new("git")
+        .arg("checkout")
+        .arg("-b")
+        .arg("dev")
+        .current_dir(&repo_path)
+        .status()
+        .await
+        .unwrap();
+
+    let remote_refs = ls_remote(repo_path.to_str().unwrap()).await.unwrap();
+
+    assert!(remote_refs.contains_key("HEAD"));
+    assert!(remote_refs.contains_key("refs/heads/master"));
+    assert!(remote_refs.contains_key("refs/heads/dev"));
+
+    tmp_dir.close().unwrap();
+}
+
+#[tokio::test]
+async fn test_select_existing_branches() {
+    let tmp_dir = tempdir().unwrap();
+    let repo_path = tmp_dir.path().to_path_buf();
+    create_test_git_repo(&repo_path).await;
+
+    // Create a new branch
+    tokio::process::Command::new("git")
+        .arg("checkout")
+        .arg("-b")
+        .arg("dev")
+        .current_dir(&repo_path)
+        .status()
+        .await
+        .unwrap();
+
+    // Make another branch
+    tokio::process::Command::new("git")
+        .arg("checkout")
+        .arg("-b")
+        .arg("feature/new")
+        .current_dir(&repo_path)
+        .status()
+        .await
+        .unwrap();
+
+    let all_branches = vec!["master".to_string(), "dev".to_string(), "feature/new".to_string(), "nonexistent".to_string()];
+    let all_branches_ref: Vec<&String> = all_branches.iter().collect();
+
+    let selected_branches = select_exsiting_branches(repo_path.to_str().unwrap(), &all_branches_ref).await.unwrap();
+
+    assert_eq!(selected_branches.len(), 3);
+    assert!(selected_branches.contains(&"refs/heads/master".to_string()));
+    assert!(selected_branches.contains(&"refs/heads/dev".to_string()));
+    assert!(selected_branches.contains(&"refs/heads/feature/new".to_string()));
+    assert!(!selected_branches.contains(&"refs/heads/nonexistent".to_string()));
 
     tmp_dir.close().unwrap();
 }
