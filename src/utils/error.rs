@@ -10,7 +10,7 @@ pub struct GtrError {
 }
 
 impl GtrError {
-    fn new(message: String) -> Self {
+    pub fn new(message: String) -> Self {
         GtrError { message }
     }
 }
