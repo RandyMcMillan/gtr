@@ -66,7 +66,7 @@ pub async fn upload_pack(dir: &PathBuf, want: &str, have: Option<&str>) -> GtrRe
     let mut pack_upload_process = start_pack_upload_process(dir).await?;
 
     let mut stdin = pack_upload_process.stdin.take().unwrap();
-    let mut stdout = pack_upload_process.stdout.take().unwrap();
+    let stdout = pack_upload_process.stdout.take().unwrap();
 
     let mut buf = BufReader::new(stdout);
     let initial_pack_data = request_pack_file(&mut buf, &mut stdin, want, have).await?;
