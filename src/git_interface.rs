@@ -63,14 +63,27 @@ pub async fn ls_remote(dir: &str) -> GtrResult<HashMap<String, String>> {
 
 /// Generates necessary pack files
 pub async fn upload_pack(dir: &PathBuf, want: &str, have: Option<&str>) -> GtrResult<()> {
-    let pack_upload = start_pack_upload_process(dir).await?;
+    let mut pack_upload_process = start_pack_upload_process(dir).await?;
 
-    let mut stdin = pack_upload.stdin.unwrap();
-    let stdout = pack_upload.stdout.unwrap();
+    let mut stdin = pack_upload_process.stdin.take().unwrap();
+    let mut stdout = pack_upload_process.stdout.take().unwrap();
 
     let mut buf = BufReader::new(stdout);
     let initial_pack_data = request_pack_file(&mut buf, &mut stdin, want, have).await?;
     write_pack_file(dir, want, initial_pack_data, &mut buf).await?;
+
+    let output = pack_upload_process.wait_with_output().await.unwrap();
+    if !output.status.success() {
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        eprintln!("git-upload-pack failed with status: {}", output.status);
+        eprintln!("stderr: {}", stderr);
+        return Err(GitError::command_failed(Box::new(
+            std::io::Error::new(
+                ErrorKind::Other,
+                format!("git-upload-pack failed: {}", stderr),
+            ),
+        )));
+    }
 
     Ok(())
 }
