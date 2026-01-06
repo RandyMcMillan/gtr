@@ -1,3 +1,5 @@
+.gnostr
+/vendor
 /target
 /src/*.example.*
 .gtr
