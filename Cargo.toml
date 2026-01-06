@@ -1,6 +1,6 @@
 [package]
 name = "gtr"
-version = "0.0.3"
+version = "0.0.4"
 edition = "2021"
 author = "dzdidi"
 about = "decentralized colaborative change management system"
